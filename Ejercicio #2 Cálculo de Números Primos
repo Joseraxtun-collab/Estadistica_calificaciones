@@ -1,0 +1,57 @@
+#include <iostream>   
+#include <vector>     // Librería para usar el contenedor vector (array dinámico)
+#include <cmath>      // Librería para usar la función sqrt()
+
+// Función que determina si un número es primo
+// Recibe un entero 'n' y retorna true si es primo, false si no lo es
+bool esPrimo(int n) {
+    if (n < 2) return false;             // Los números menores a 2 no son primos
+    if (n == 2) return true;             // El 2 es el único número primo par
+    if (n % 2 == 0) return false;        // Cualquier otro par no es primo
+
+    // Solo se verifica hasta la raíz cuadrada de n (optimización matemática)
+    int limite = static_cast<int>(sqrt(n)); // Calculamos el límite de la búsqueda
+
+    for (int i = 3; i <= limite; i += 2) { // Iteramos solo en números impares desde 3
+        if (n % i == 0) return false;      // Si n es divisible por i, no es primo
+    }
+
+    return true; // Si no encontró divisores, el número es primo
+}
+
+int main() {
+    int N; // Variable para almacenar el número ingresado por el usuario
+
+    // Pedimos al usuario que ingrese un número entero positivo
+    std::cout << "Ingrese un numero entero positivo N: ";
+    std::cin >> N; // Leemos el valor de N desde la consola
+
+    // Validamos que el número ingresado sea positivo
+    if (N <= 0) {
+        std::cout << "Error: N debe ser un numero entero positivo." << std::endl; // Mensaje de error
+        return 1; // Terminamos el programa con código de error
+    }
+
+    std::vector<int> primos; // Creamos un vector vacío para almacenar los números primos
+    primos.reserve(N);       // Reservamos espacio para N elementos (optimización de memoria)
+
+    int candidato = 2; 
+
+    // Seguimos buscando hasta tener exactamente N números primos en el vector
+    while (static_cast<int>(primos.size()) < N) {
+        if (esPrimo(candidato)) {        // se verifica  si el candidato actual es primo
+            primos.push_back(candidato); // Si es primo, lo agregamos al vector
+        }
+        candidato++; 
+    }
+
+    // Imprimimos el encabezado del resultado
+    std::cout << "\nLos primeros " << N << " numeros primos son:" << std::endl;
+
+    // Recorremos el vector e imprimimos cada número primo encontrado
+    for (int i = 0; i < static_cast<int>(primos.size()); i++) {
+        std::cout << "  [" << i + 1 << "] " << primos[i] << std::endl; 
+    }
+
+    return 0; 
+}
